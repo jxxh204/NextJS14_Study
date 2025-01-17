@@ -1,8 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/api/slack/route": "app/api/slack/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/componenttwo/page": "app/componenttwo/page.js",
-  "/componentthree/page": "app/componentthree/page.js"
+  "/api/slack/route": "app/api/slack/route.js"
 }
