@@ -1,23 +1,20 @@
 import { getDatabaseItems } from "../services/notionService";
 
-// Notion 데이터베이스 ID
-const databaseId = process.env.NOTION_DATABASE_ID;
-
-export async function POST(req) {
+export async function GET(req) {
   try {
-    const body = await req.json(); // Slack에서 보낸 요청 바디를 파싱
-    console.log("📩 Slack POST Request:", body);
+    const body = await req.json(); // Slack 요청의 바디를 파싱
+    console.log("📩 Received Slack POST Request:", body); // Slack 요청 로그 출력
 
-    // Notion 데이터베이스에서 데이터 조회
-    const notionItems = await getDatabaseItems(databaseId);
+    // Optional: Notion 데이터베이스에서 데이터를 가져올 경우
+    const databaseId = process.env.NOTION_DATABASE_ID; // Notion 데이터베이스 ID
+    const notionData = await getDatabaseItems(databaseId);
 
-    // Slack 요청에 응답
-    return new Response(JSON.stringify({ data: notionItems }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ message: "Request received successfully", notionData }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   } catch (error) {
-    console.error("❌ Error handling Slack request:", error);
+    console.error("❌ Error handling Slack request:", error); // 에러 로그 출력
     return new Response(
       JSON.stringify({ error: "Failed to process Slack request" }),
       { status: 500, headers: { "Content-Type": "application/json" } }
