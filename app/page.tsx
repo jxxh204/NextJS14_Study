@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from "react";
 
+interface SlackNotification {
+  type: string;
+  text?: string;
+}
+
 export default function Home() {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<SlackNotification[]>([]);
 
   useEffect(() => {
     // WebSocket 연결
