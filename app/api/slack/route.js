@@ -1,9 +1,10 @@
 import { WebSocketServer } from "ws";
+import { createNotionBacklog } from "../../../services/notionService";
 
 let wss; // WebSocket 서버 인스턴스
 
 export async function POST(req) {
-  const body = await req.json(); // Slack 요청 바디를 파싱
+  const body = await req.json();
 
   // Slack URL 검증
   if (body.type === "url_verification") {
@@ -20,7 +21,14 @@ export async function POST(req) {
 
     console.log("📩 Slack Event Received:", event);
 
-    // WebSocket을 통해 알림 브로드캐스트
+    // Notion에 백로그 작성
+    try {
+      await createNotionBacklog(event);
+    } catch (error) {
+      console.error("❌ Failed to save backlog to Notion");
+    }
+
+    // WebSocket 클라이언트에게 알림 전송
     if (wss) {
       wss.clients.forEach((client) => {
         if (client.readyState === 1) {
@@ -37,7 +45,7 @@ export async function POST(req) {
 
 export const config = {
   api: {
-    bodyParser: false, // WebSocket 초기화용 bodyParser 비활성화
+    bodyParser: false, // WebSocket 업그레이드 지원
   },
 };
 
