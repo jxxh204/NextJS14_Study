@@ -1,7 +1,7 @@
 import { Client } from "@notionhq/client";
 
 // Notion API 초기화
-const notion = new Client({ auth: process.env.NOTION_API_KEY });
+const notion = new Client({ auth: process.env.NEXT_PUBLIC_NOTION_API_KEY });
 
 /**
  * Notion 데이터베이스에서 데이터 조회

@@ -6,6 +6,8 @@ export default function Home() {
   const [logMessages, setLogMessages] = useState<string[]>([]); // 타입 추가
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
 
+  console.log(process.env.NEXT_PUBLIC_NOTION_DATABASE_ID);
+
   // Slack API 호출
   const sendSlackRequest = async () => {
     setIsLoading(true); // 로딩 시작
@@ -40,6 +42,13 @@ export default function Home() {
       setIsLoading(false); // 로딩 종료
     }
   };
+  const getNotionData = async () => {
+    const response = await fetch(
+      `/api/slack?${process.env.NEXT_PUBLIC_NOTION_DATABASE_ID}`
+    );
+    const data = await response.json();
+    console.log(data);
+  };
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
@@ -58,6 +67,7 @@ export default function Home() {
       >
         {isLoading ? "Sending..." : "Send Slack Request"}
       </button>
+      <button onClick={getNotionData}>Get Notion Data</button>
       <div style={{ marginTop: "20px", textAlign: "left" }}>
         <h3>Logs:</h3>
         <ul>
